@@ -1,3 +1,10 @@
 body{
-    background: yellow;
+    background:oldlace;
+}
+
+.img-custom{
+    max-width:230px;
+    max-height:174px;
+    height:100%;
+    width:100%;
 }
