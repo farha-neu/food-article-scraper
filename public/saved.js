@@ -1,9 +1,4 @@
-
-getArticles(true);
-
-// Grab the articles as a json
-function getArticles(isSaved){
-$.getJSON("/articles/"+isSaved, function(data) {
+$.getJSON("/articles/true", function(data) {
   console.log(data);
   if(data.length>0)
   {
@@ -15,14 +10,10 @@ $.getJSON("/articles/"+isSaved, function(data) {
         var headLine = $("<h2>").html(data[i].title);
         newsLink.html(headLine);
         var summary = $("<p>").html(data[i].summary);
-        var img = $("<img class='img-thumbnail img-custom'>").attr("src",data[i].image);
-        var saveBtn = $("<button class='save'>").addClass("btn btn-success");
-       
-       
-        
-        var button = $("<button id='saveBtn'>").html("remove from saved");
+        var img = $("<img class='img-thumbnail img-custom'>").attr("src",data[i].image); 
+        var button = $("<button>").addClass('saveBtn').html("Remove from saved");
         button.attr("data-id", data[i]._id);
-        button.attr("data-saved",!data[i].saveNote);
+        button.attr("data-saved",!data[i].isSaved);
         var buttonNote = $("<button id='noteBtn'>").html("Add Notes");
         buttonNote.attr("data-id", data[i]._id);
         divContainer.append(newsLink,summary,img,button,buttonNote);
@@ -33,33 +24,34 @@ $.getJSON("/articles/"+isSaved, function(data) {
       $("#articles").html("Uh Oh. Looks like we don't have any new articles saved.");
     }
 });
-}
 
-$(document).on("click", "#saveBtn", function() {
+
+$(document).on("click", ".saveBtn", function() {
+  console.log("click");
   var articleId = $(this).attr("data-id");
   var saveNote = $(this).attr("data-saved");
+  console.log(articleId,saveNote)
   // $(this).parent().empty();
   $("#notes").empty();
   // NOT FINISHED :)
   $.ajax({
     method: "PUT",
     url: "/article/" + articleId+"/saved/"+saveNote,
-    // data:{saved: saved}
     }).then(function(data){
-        // console.log(data);      
         location.reload();
     });
 })
 
 
 
-// Whenever someone clicks a p tag
+// // Whenever someone clicks a p tag
 $(document).on("click", "#noteBtn", function() {
+  console.log("clk");
   // Empty the notes from the note section
   $("#notes").empty();
   // Save the id from the p tag
   var thisId = $(this).attr("data-id");
-
+ console.log(thisId);
   // Now make an ajax call for the Article
   $.ajax({
     method: "GET",
@@ -69,7 +61,7 @@ $(document).on("click", "#noteBtn", function() {
     .then(function(data) {
       console.log(data);
       // // If there's a note in the article
-      if (data.note.length>0) {
+      if (data.note) {
         for(var i = 0; i<data.note.length;i++){
           var noteDiv = $("<div>").addClass("note-div");
           var note = $("<p>").html(data.note[i].body);
@@ -96,14 +88,13 @@ $(document).on("click", "#noteBtn", function() {
 $("#notes").on("click", "#savenote", function() {
   // Grab the id associated with the article from the submit button
   var thisId = $(this).attr("data-id");
-  console.log("hi",$("#titleinput").val());
+  console.log("clicked");
+  console.log("hi",$("#bodyinput").val());
   // Run a POST request to change the note, using what's entered in the inputs
   $.ajax({
     method: "POST",
     url: "/articles/" + thisId,
     data: {
-      // Value taken from title input
-      title: $("#titleinput").val(),
       // Value taken from note textarea
       body: $("#bodyinput").val()
     }
@@ -117,7 +108,6 @@ $("#notes").on("click", "#savenote", function() {
     });
 
   // // Also, remove the values entered in the input and textarea for note entry
-  $("#titleinput").val("");
   $("#bodyinput").val("");
 });
 

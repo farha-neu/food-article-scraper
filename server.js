@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/week18Populater");
+mongoose.connect("mongodb://localhost/scrapperDb");
 
 // Routes
 
@@ -57,13 +57,12 @@ app.get("/scrape", function(req, res) {
       db.Article.create(result)
         .then(function(dbArticle) {
           // View the added result in the console
-            console.log(dbArticle);
-           
+          console.log(dbArticle);
         })
         .catch(function(err) {
-            console.log(err.message);
           // If an error occurred, send it to the client
-            
+          // return res.json(err);
+          console.log(err);
         });
     });
 
@@ -75,7 +74,7 @@ app.get("/scrape", function(req, res) {
 // Route for getting all Articles from the db
 app.get("/articles/:saved", function(req, res) {
   // Grab every document in the Articles collection
-  db.Article.find({saveNote:req.params.saved}).populate("note")
+  db.Article.find({isSaved:req.params.saved}).populate("note")
     .then(function(dbArticle) {
       // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);
@@ -94,7 +93,6 @@ app.get("/article/:id", function(req, res) {
     .populate("note")
     .then(function(dbArticle) {
       // If we were able to successfully find an Article with the given id, send it back to the client
-      console.log(dbArticle);
       res.json(dbArticle);
     })
     .catch(function(err) {
@@ -111,7 +109,7 @@ app.post("/articles/:id", function(req, res) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      return db.Article.findOneAndUpdate({ _id: req.params.id }, {$push: {note: dbNote._id} }, { new: true });
+      return db.Article.findOneAndUpdate({ _id: req.params.id },{$push: {note: dbNote._id} }, { new: true });
     })
     .then(function(dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
@@ -125,7 +123,7 @@ app.post("/articles/:id", function(req, res) {
 
 //updating articles to saved/unsaved
 app.put("/article/:id/saved/:saved",function(req,res){
-  db.Article.update({_id:req.params.id},{$set:{saveNote:req.params.saved}},{ new: true }).then(function(dbArticle){
+  db.Article.update({_id:req.params.id},{$set:{isSaved:req.params.saved}},{ new: true }).then(function(dbArticle){
     res.json(dbArticle);
   })
   .catch(function(err){
@@ -133,34 +131,20 @@ app.put("/article/:id/saved/:saved",function(req,res){
   })
 })
 
-// app.delete("/note/:id",function(req,res){
-//     db.Note.findByIdAndRemove(req.params.id).then(function(error){
-//       if (error) {
-//         console.log(error);
-//         res.send(error);
-//       }
-//       else {
-//         console.log(removed);
-//         res.send(removed);
-//       }
-//     })
-// });
 app.delete("/article/:id/note/:noteId",function(req,res){
-    db.Note.findByIdAndRemove(req.params.noteId).then(function(){
-        console.log("--------------------");
-        return db.Article.update({ _id: req.params.id }, {$pull: {note:req.params.noteId}});
-    }).then(function(dbArticle) {
-      // If we were able to successfully update an Article, send it back to the client
-      res.json(dbArticle);
-    })
-    .catch(function(err) {
-      // If an error occurred, send it to the client
-      res.json(err);
-    });
+  db.Note.findByIdAndRemove(req.params.noteId).then(function(){
+      console.log("--------------------");
+      return db.Article.update({ _id: req.params.id }, {$pull: {note:req.params.noteId}});
+  }).then(function(dbArticle) {
+    // If we were able to successfully update an Article, send it back to the client
+    res.json(dbArticle);
+  })
+  .catch(function(err) {
+    // If an error occurred, send it to the client
+    res.json(err);
+  });
 });
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "public/index.html"));
-});
+
 app.get("/saved", function(req, res) {
   res.sendFile(path.join(__dirname, "public/saved.html"));
 });
