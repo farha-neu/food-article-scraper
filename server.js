@@ -145,6 +145,17 @@ app.delete("/article/:id/note/:noteId",function(req,res){
   });
 });
 
+app.delete("/delete",function(req,res){
+  db.Note.remove({}).then(function(){
+    return db.Article.remove({});
+  }).then(function(){
+    res.json("Deleted");
+  })
+  .catch(function(err) {
+    res.json(err);
+  });
+})
+
 app.get("/saved", function(req, res) {
   res.sendFile(path.join(__dirname, "public/saved.html"));
 });
