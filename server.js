@@ -28,7 +28,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/scrapperDb");
+var databaseUri = "mongodb://localhost/scrapperDb";
+if(process.env.MONGODB_URI){
+  mongoose.connect(process.env.MONGODB_URI);
+}
+else{
+  mongoose.connect(databaseUri);
+}
+var dbConnect = mongoose.connection;
+
+dbConnect.on('error',function(err){
+  console.log("Mongoose error: ",err);
+})
+
+dbConnect.once('open',function(){
+  console.log("Mongoose connection successful");
+})
+
 
 // Routes
 
