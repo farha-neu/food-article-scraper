@@ -16,13 +16,13 @@ $.getJSON("/articles/true", function(data) {
     titleSummaryColumn.append(newsLink,summary);
 
     var buttonColumn = $("<div>").addClass("col-md-3");
-    var button = $("<button>").addClass('saveBtn btn btn-warning btn-sm float-md-right ml-md-2 mb-2');
+    var button = $("<button>").addClass('saveBtn btn btn-danger btn-sm float-md-right ml-md-2 mb-2');
     button.attr("data-id", data[i]._id);
     button.attr("data-saved",!data[i].isSaved);
     var buttonIcon = $("<img>").attr("src","/images/save.png");
-    button.append(buttonIcon).html("Remove from saved");
+    button.append(buttonIcon).html("Remove from Saved");
 
-    var buttonNote = $("<button id='noteBtn'>").addClass('btn btn-danger btn-sm float-md-right');
+    var buttonNote = $("<button id='noteBtn'>").addClass('btn btn-info btn-sm float-md-right mb-2');
     buttonNote.attr("data-toggle","modal");
     buttonNote.attr("data-target","#exampleModal");
     buttonNote.attr("data-id", data[i]._id);
@@ -37,8 +37,10 @@ $.getJSON("/articles/true", function(data) {
     var articleDiv = $("<div>").addClass("col-md-12 mb-4 article text-center");
     var row =$("<div>").addClass("row");
     var msgColumn =  $("<div>").addClass("col-md-12 msg");
-    var msg = $("<p>").addClass("text-center").html("No articles saved. Browse available articles!");
-    msgColumn.append(msg);
+    var msg = $("<p>").addClass("text-center").html("No saved articles found.");
+    var optionIcon = $("<img>").attr("src","/images/option.png");
+    var option = $("<a>").attr("href","/").addClass("scrape op").append(optionIcon,"Browse Articles");
+    msgColumn.append(msg,option);
     row.append(msgColumn);
     articleDiv.append(row);
     articlesDiv.append(articleDiv);

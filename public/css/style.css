@@ -28,6 +28,11 @@ body,html{
     width: 100%;
 }
 
+#jumbotron-custom{
+    background-image: url("/images/saved.jpg");     
+    height: 30vh;
+    
+}
 
 .header{
     font-size:3rem;
@@ -46,6 +51,13 @@ body,html{
     font-weight: bold;
 }
 
+#custom-header{
+    font-size:30px !important;
+}
+
+#custom-subheader{
+    font-size:30px !important;
+}
 /* #ffdcd2; fd6b54 Blanc-Regular #535353; */
 .articles{
     padding-left:30px;
@@ -78,17 +90,6 @@ body,html{
     color:black !important;
 }
 
-.saveBtn{
-    border:2px solid #fd6b54;
-    color:#fd6b54;
-    background-color:rgba(245,245,245,0.6);
-    font-weight: bold;
-}
-
-.saveBtn:hover{
-    background-color:#fd6b54;
-    color: beige;
-}
 
 .msg{
     font-size: 24px;
@@ -118,4 +119,18 @@ body,html{
 
 textarea{
     border:0.5px ridge salmon !important;
+}
+button:hover{
+    cursor: pointer;
+}
+
+.op{
+    font-size: 20px;
+    color:#fd6b54 !important;
+}
+
+.op:hover{
+    color:orangered !important;
+    cursor: pointer;
+    text-decoration: none !important;
 }

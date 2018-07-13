@@ -8,3 +8,13 @@ $(document).on("click", ".delete", function() {
           location.reload();
       });
   })
+
+  $(document).on("click", ".scrape", function() {
+    $.ajax({
+      method: "GET",
+      url: "/scrape"
+    }).then(function(data){
+     window.location.href="/";
+    });
+  })
+  
