@@ -8,7 +8,9 @@ $.getJSON("/articles/false", function(data) {
 
     var imageColumn = $("<div>").addClass("col-md-2");
     var img = $("<img class='img-fluid image'>").attr("src",data[i].image);
-    imageColumn.append(img);
+    var imgLink = $("<a>").addClass("title").attr("href",data[i].link);
+    imgLink.append(img);
+    imageColumn.append(imgLink);
 
     var titleSummaryColumn =  $("<div>").addClass("col-md-8");
     var newsLink = $("<a>").addClass("title").attr("href",data[i].link).html(data[i].title);

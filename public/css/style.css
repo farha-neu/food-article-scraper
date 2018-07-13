@@ -76,6 +76,11 @@ body,html{
     border-radius:10px;
 }
 
+.image:hover{
+    opacity: 0.8;
+    border:1px ridge beige;
+}
+
 .title{
     
     font-size: 24px;
@@ -99,7 +104,7 @@ body,html{
 }
 
 .note{
-    background-color: rgba(245,245,245,0.4);
+    background-color: rgba(245,245,245,0.9);
     border:0.5px ridge salmon;
     padding:10px;
     border-radius: 10px;
