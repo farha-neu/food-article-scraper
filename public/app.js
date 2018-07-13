@@ -16,7 +16,7 @@ $.getJSON("/articles/false", function(data) {
     titleSummaryColumn.append(newsLink,summary);
 
     var buttonColumn = $("<div>").addClass("col-md-2");
-    var button = $("<button>").addClass('saveBtnbtn btn-warning btn-sm saveBtn');
+    var button = $("<button>").addClass('saveBtnbtn btn-warning btn-sm saveBtn float-right');
     button.attr("data-id", data[i]._id);
     button.attr("data-saved",!data[i].isSaved);
     var buttonIcon = $("<img>").attr("src","/images/save.png");
@@ -31,7 +31,7 @@ $.getJSON("/articles/false", function(data) {
     var articleDiv = $("<div>").addClass("col-md-12 mb-4 article text-center");
     var row =$("<div>").addClass("row");
     var msgColumn =  $("<div>").addClass("col-md-12 msg");
-    var msg = $("<p>").addClass("text-center").html("No new articles found at this moment. Try scraping new articles!");
+    var msg = $("<p>").addClass("text-center").html("No new articles found. Try scraping new articles!");
     msgColumn.append(msg);
     row.append(msgColumn);
     articleDiv.append(row);
@@ -44,8 +44,6 @@ $(document).on("click", "#scrape", function() {
     method: "GET",
     url: "/scrape"
   }).then(function(data){
-    // console.log(data);
-  //  getArticles(false);
    location.reload();
   });
 })
@@ -53,14 +51,10 @@ $(document).on("click", "#scrape", function() {
 $(document).on("click", ".saveBtn", function() {
   var articleId = $(this).attr("data-id");
   var isSaved = $(this).attr("data-saved");
-  // $(this).parent().empty();
-  // NOT FINISHED :)
   $.ajax({
     method: "PUT",
     url: "/article/" + articleId+"/saved/"+isSaved,
-    // data:{saved: saved}
-    }).then(function(data){
-        // console.log(data);      
+    }).then(function(data){      
         location.reload();
     });
 })

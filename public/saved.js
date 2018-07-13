@@ -16,13 +16,15 @@ $.getJSON("/articles/true", function(data) {
     titleSummaryColumn.append(newsLink,summary);
 
     var buttonColumn = $("<div>").addClass("col-md-3");
-    var button = $("<button>").addClass('saveBtn btn btn-warning btn-sm');
+    var button = $("<button>").addClass('saveBtn btn btn-warning btn-sm float-md-right ml-md-2 mb-2');
     button.attr("data-id", data[i]._id);
     button.attr("data-saved",!data[i].isSaved);
     var buttonIcon = $("<img>").attr("src","/images/save.png");
     button.append(buttonIcon).html("Remove from saved");
 
-    var buttonNote = $("<button id='noteBtn'>").addClass('btn btn-danger btn-sm ml-2');
+    var buttonNote = $("<button id='noteBtn'>").addClass('btn btn-danger btn-sm float-md-right');
+    buttonNote.attr("data-toggle","modal");
+    buttonNote.attr("data-target","#exampleModal");
     buttonNote.attr("data-id", data[i]._id);
     buttonNote.html("View/Add Notes");
     buttonColumn.append(button,buttonNote);
@@ -57,66 +59,59 @@ $(document).on("click", ".saveBtn", function() {
 
 
 $(document).on("click", "#noteBtn", function() {
-  $("#notes").empty();
-  var thisId = $(this).attr("data-id");
-  console.log(thisId);
+  $(".modal-title").empty();
+  $(".view-note").empty();
+  $("#bodyinput").val("");
+  console.log("clicked");
+   var thisId = $(this).attr("data-id");
   $.ajax({
     method: "GET",
     url: "/article/" + thisId
   })
-    // With that done, add the note information to the page
     .then(function(data) {
       console.log(data);
-      // // If there's a note in the article
-      if (data.note) {
+      console.log(data.note.length);
+      var viewNoteContainer = $(".view-note");
+      if (data.note.length>=1) {
         for(var i = 0; i<data.note.length;i++){
-          var noteDiv = $("<div>").addClass("note-div");
-          var note = $("<p>").html(data.note[i].body);
-          var deleteNote = $("<button>").addClass("noteDelete").html("X");
-          deleteNote.attr("data-id", data.note[i]._id);
-          deleteNote.attr("data-aid", data._id);
-          noteDiv.append(note,deleteNote)
-          $("#notes").append(noteDiv);
+          var noteDiv = $("<div>").addClass("note mb-2");
+          noteDiv.append(data.note[i].body);
+          var deleteBtn = $("<button>").addClass("btn btn-danger btn-sm noteDelete ml-2");
+          var deleteIcon = $("<i>").addClass("fas fa-times");
+          deleteBtn.attr("data-id", data.note[i]._id);
+          deleteBtn.attr("data-aid", data._id);
+          deleteBtn.append(deleteIcon);
+          noteDiv.append(deleteBtn);
+          viewNoteContainer.append(noteDiv);
         }
        }
-
-      // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
-      // // An input to enter a new title
-      // $("#notes").append("<input id='titleinput' name='title' >");
-      // A textarea to add a new note body
-      $("#notes").append("<textarea id='bodyinput' rows='4' cols='50' name='body'></textarea>");
-      // A button to submit a new note, with the id of the article saved to it
-      $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+       else{
+         var noteDiv = $("<div>").addClass("note mb-2 text-center");
+         noteDiv.append("No notes for this article yet.");
+         viewNoteContainer.append(noteDiv);
+       }
+       $(".modal-title").append("Notes for article: " + data._id);
+       $("#savenote").attr("data-id",data._id)
     });
-});
+ });
 
-// When you click the savenote button
-$("#notes").on("click", "#savenote", function() {
-  // Grab the id associated with the article from the submit button
-  var thisId = $(this).attr("data-id");
-  console.log("clicked");
-  console.log("hi",$("#bodyinput").val());
-  // Run a POST request to change the note, using what's entered in the inputs
-  $.ajax({
-    method: "POST",
-    url: "/articles/" + thisId,
-    data: {
-      // Value taken from note textarea
-      body: $("#bodyinput").val()
-    }
-  })
-    // With that done
-    .then(function(data) {
-      // Log the response
-      console.log(data);
-      // Empty the notes section
-      $("#notes").empty();
-    });
-
-  // // Also, remove the values entered in the input and textarea for note entry
-  $("#bodyinput").val("");
-});
+  $(".modal-footer").on("click", "#savenote", function() {
+     var thisId = $(this).attr("data-id");
+     console.log("hi",$("#bodyinput").val());
+     if($("#bodyinput").val().trim()!==""){
+          $.ajax({
+            method: "POST",
+            url: "/articles/" + thisId,
+            data: {
+              body: $("#bodyinput").val()
+            }
+          })
+          .then(function(data) {
+            console.log(data);
+            location.reload();
+          });
+     }
+  });
 
 
 $(document).on("click", ".noteDelete", function() {
@@ -124,12 +119,10 @@ $(document).on("click", ".noteDelete", function() {
   var noteId = $(this).attr("data-id");
   var articleId = $(this).attr("data-aid");
   console.log(noteId);
-  // $(this).parent().empty(); 
   $.ajax({
     method: "DELETE",
     url: "/article/"+articleId+"/note/" + noteId,
-    }).then(function(){
-        // console.log(data);     
+    }).then(function(){    
         location.reload();
     });
 })

@@ -96,3 +96,26 @@ body,html{
     color:#535353 !important;
     text-align: center
 }
+
+.note{
+    background-color: rgba(245,245,245,0.4);
+    border:0.5px ridge salmon;
+    padding:10px;
+    border-radius: 10px;
+}
+
+.modal-body{
+    background-color:#ffdcd2;
+    background-image: url("/images/modal.jpg");
+    background-size: cover;
+}
+
+.noteDelete{
+    padding:4px !important;
+    padding-top:2px !important;
+    padding-bottom:2px !important;
+}
+
+textarea{
+    border:0.5px ridge salmon !important;
+}
