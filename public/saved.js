@@ -9,13 +9,17 @@ $.getJSON("/articles/true", function(data) {
     var imageColumn = $("<div>").addClass("col-md-2");
     var img = $("<img class='img-fluid image'>").attr("src",data[i].image);
     var imgLink = $("<a>").addClass("title").attr("href",data[i].link);
+    imgLink.attr("target","_blank");
     imgLink.append(img);
     imageColumn.append(imgLink);
 
     var titleSummaryColumn =  $("<div>").addClass("col-md-7");
     var newsLink = $("<a>").addClass("title").attr("href",data[i].link).html(data[i].title);
+    newsLink.attr("target","_blank");
     var summary = $("<p>").addClass("summary mt-3").html(data[i].summary);
-    titleSummaryColumn.append(newsLink,summary);
+    var readmore = $("<a>").addClass("read-more").attr("href",data[i].link).html("Read More <i class='fas fa-chevron-circle-right'></i>");
+    readmore.attr("target","_blank");
+    titleSummaryColumn.append(newsLink,summary,readmore);
 
     var buttonColumn = $("<div>").addClass("col-md-3");
     var button = $("<button>").addClass('saveBtn btn btn-danger btn-sm float-md-right ml-md-2 mb-2');
