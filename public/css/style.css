@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Markazi+Text');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+@import url('https://fonts.googleapis.com/css?family=Bree+Serif');
+body,html{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Roboto Slab', serif;
+    /* background-color: #f7f7f7; */
+    background: #ffdcd2;
+}
+
+.jumbotron{
+    background-image: url("/images/jumbotron.jpg"); 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-color:#ccc;
+    background-size: cover;
+    width:100%;
+    height: 60vh;
+    position: relative;
+}
+
+.jumbotron-header{
+    position: absolute;
+    top:30%;
+    width: 100%;
+}
+
+
+.header{
+    font-size:3rem;
+    text-transform: uppercase;
+    /* font-family: 'Anton', sans-serif; */
+    font-family: 'Handlee', cursive;
+    font-weight: bold;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color:salmon;
+    color:black;
+}
+
+.sub-header{
+    font-size:2.5rem;
+    font-family: 'Handlee', cursive;
+    font-weight: bold;
+}
+
+/* #ffdcd2; fd6b54 Blanc-Regular #535353; */
+.articles{
+    padding-left:30px;
+    padding-right:30px;
+
+}
+.article{
+    background-color:rgba(245,245,245,0.6);
+    padding:20px;
+    border-radius:10px;
+}
+
+.image{
+    width:229.6px;
+    height:auto;
+    border-radius:10px;
+}
+
+.title{
+    
+    font-size: 24px;
+    font-weight: bold;
+    color:#535353 !important;
+    /* font-family: 'Bree Serif', serif; */
+    
+}
+
+.summary{
+    font-size:18px;
+    color:black !important;
+}
+
+.saveBtn{
+    border:2px solid #fd6b54;
+    color:#fd6b54;
+    background-color:rgba(245,245,245,0.6);
+    font-weight: bold;
+}
+
+.saveBtn:hover{
+    background-color:#fd6b54;
+    color: beige;
+}
+
+.msg{
+    font-size: 24px;
+    font-weight: bold;
+    color:#535353 !important;
+    text-align: center
+}

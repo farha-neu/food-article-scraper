@@ -1,25 +1,41 @@
-// Grab the articles as a json
 $.getJSON("/articles/false", function(data) {
+  var articlesDiv = $(".articles");
   if(data.length>0){
   // For each one
   for (var i = 0; i < data.length; i++) {
-    // Display the apropos information on the page
-    var divContainer =$("<div>").addClass("wrapper");
-    var newsLink = $("<a>").attr("href",data[i].link);
-    var headLine = $("<h2>").html(data[i].title);
-    newsLink.html(headLine);
-    var summary = $("<p>").html(data[i].summary);
-    var img = $("<img class='img-thumbnail img-custom'>").attr("src",data[i].image);
+    var articleDiv = $("<div>").addClass("col-md-12 mb-4 article");
+    var row =$("<div>").addClass("row");
 
-    var button = $("<button>").addClass('saveBtn').html("save article");
+    var imageColumn = $("<div>").addClass("col-md-2");
+    var img = $("<img class='img-fluid image'>").attr("src",data[i].image);
+    imageColumn.append(img);
+
+    var titleSummaryColumn =  $("<div>").addClass("col-md-8");
+    var newsLink = $("<a>").addClass("title").attr("href",data[i].link).html(data[i].title);
+    var summary = $("<p>").addClass("summary mt-3").html(data[i].summary);
+    titleSummaryColumn.append(newsLink,summary);
+
+    var buttonColumn = $("<div>").addClass("col-md-2");
+    var button = $("<button>").addClass('saveBtnbtn btn-warning btn-sm saveBtn');
     button.attr("data-id", data[i]._id);
     button.attr("data-saved",!data[i].isSaved);
-    divContainer.append(newsLink,summary,img,button);
-    $("#articles").append(divContainer);
-    // $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+    var buttonIcon = $("<img>").attr("src","/images/save.png");
+    button.append(buttonIcon,"Save Article");
+    buttonColumn.append(button);
+    
+    row.append(imageColumn,titleSummaryColumn,buttonColumn);
+    articleDiv.append(row);
+    articlesDiv.append(articleDiv);
   }}
   else{
-    $("#articles").html("Uh Oh. Looks like we don't have any new articles at this moment.");
+    var articleDiv = $("<div>").addClass("col-md-12 mb-4 article text-center");
+    var row =$("<div>").addClass("row");
+    var msgColumn =  $("<div>").addClass("col-md-12 msg");
+    var msg = $("<p>").addClass("text-center").html("No new articles found at this moment. Try scraping new articles!");
+    msgColumn.append(msg);
+    row.append(msgColumn);
+    articleDiv.append(row);
+    articlesDiv.append(articleDiv);
   }
 });
 
@@ -49,3 +65,12 @@ $(document).on("click", ".saveBtn", function() {
     });
 })
 
+$(document).on("click", ".delete", function() {
+  console.log("clicked");
+  $.ajax({
+    method: "DELETE",
+    url: "/delete",
+    }).then(function(){   
+        location.reload();
+    });
+})

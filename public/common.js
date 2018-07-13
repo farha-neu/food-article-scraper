@@ -4,8 +4,7 @@ $(document).on("click", ".delete", function() {
     $.ajax({
       method: "DELETE",
       url: "/delete",
-      }).then(function(){
-          // console.log(data);     
+      }).then(function(){   
           location.reload();
       });
   })

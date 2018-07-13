@@ -1,39 +1,52 @@
 $.getJSON("/articles/true", function(data) {
-  console.log(data);
-  if(data.length>0)
-  {
-      // For each one
-      for (var i = 0; i < data.length; i++) {
-        // Display the apropos information on the page
-        var divContainer =$("<div>").addClass("wrapper");
-        var newsLink = $("<a>").attr("href",data[i].link);
-        var headLine = $("<h2>").html(data[i].title);
-        newsLink.html(headLine);
-        var summary = $("<p>").html(data[i].summary);
-        var img = $("<img class='img-thumbnail img-custom'>").attr("src",data[i].image); 
-        var button = $("<button>").addClass('saveBtn').html("Remove from saved");
-        button.attr("data-id", data[i]._id);
-        button.attr("data-saved",!data[i].isSaved);
-        var buttonNote = $("<button id='noteBtn'>").html("Add Notes");
-        buttonNote.attr("data-id", data[i]._id);
-        divContainer.append(newsLink,summary,img,button,buttonNote);
-        $("#articles").append(divContainer);
-       }
-    }
-    else{
-      $("#articles").html("Uh Oh. Looks like we don't have any new articles saved.");
-    }
-});
+  var articlesDiv = $(".articles");
+  if(data.length>0){
+  // For each one
+  for (var i = 0; i < data.length; i++) {
+    var articleDiv = $("<div>").addClass("col-md-12 mb-4 article");
+    var row =$("<div>").addClass("row");
 
+    var imageColumn = $("<div>").addClass("col-md-2");
+    var img = $("<img class='img-fluid image'>").attr("src",data[i].image);
+    imageColumn.append(img);
+
+    var titleSummaryColumn =  $("<div>").addClass("col-md-7");
+    var newsLink = $("<a>").addClass("title").attr("href",data[i].link).html(data[i].title);
+    var summary = $("<p>").addClass("summary mt-3").html(data[i].summary);
+    titleSummaryColumn.append(newsLink,summary);
+
+    var buttonColumn = $("<div>").addClass("col-md-3");
+    var button = $("<button>").addClass('saveBtn btn btn-warning btn-sm');
+    button.attr("data-id", data[i]._id);
+    button.attr("data-saved",!data[i].isSaved);
+    var buttonIcon = $("<img>").attr("src","/images/save.png");
+    button.append(buttonIcon).html("Remove from saved");
+
+    var buttonNote = $("<button id='noteBtn'>").addClass('btn btn-danger btn-sm ml-2');
+    buttonNote.attr("data-id", data[i]._id);
+    buttonNote.html("View/Add Notes");
+    buttonColumn.append(button,buttonNote);
+
+    row.append(imageColumn,titleSummaryColumn,buttonColumn);
+    articleDiv.append(row);
+    articlesDiv.append(articleDiv);
+  }}
+  else{
+    var articleDiv = $("<div>").addClass("col-md-12 mb-4 article text-center");
+    var row =$("<div>").addClass("row");
+    var msgColumn =  $("<div>").addClass("col-md-12 msg");
+    var msg = $("<p>").addClass("text-center").html("No articles saved. Browse available articles!");
+    msgColumn.append(msg);
+    row.append(msgColumn);
+    articleDiv.append(row);
+    articlesDiv.append(articleDiv);
+  }
+});
 
 $(document).on("click", ".saveBtn", function() {
   console.log("click");
   var articleId = $(this).attr("data-id");
   var saveNote = $(this).attr("data-saved");
-  console.log(articleId,saveNote)
-  // $(this).parent().empty();
-  $("#notes").empty();
-  // NOT FINISHED :)
   $.ajax({
     method: "PUT",
     url: "/article/" + articleId+"/saved/"+saveNote,
@@ -43,16 +56,10 @@ $(document).on("click", ".saveBtn", function() {
 })
 
 
-
-// // Whenever someone clicks a p tag
 $(document).on("click", "#noteBtn", function() {
-  console.log("clk");
-  // Empty the notes from the note section
   $("#notes").empty();
-  // Save the id from the p tag
   var thisId = $(this).attr("data-id");
- console.log(thisId);
-  // Now make an ajax call for the Article
+  console.log(thisId);
   $.ajax({
     method: "GET",
     url: "/article/" + thisId

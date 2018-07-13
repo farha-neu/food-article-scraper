@@ -39,6 +39,7 @@ dbConnect.once('open',function(){
 app.get("/scrape", function(req, res) {
   axios.get("https://www.washingtonpost.com/food/").then(function(response) {
     var $ = cheerio.load(response.data);
+
     $(".story-list-story").each(function(i, element) {
       var result = {};
       var newsLink = $(element).find(".story-image").find("a").attr("href");
@@ -50,6 +51,7 @@ app.get("/scrape", function(req, res) {
       result.link = newsLink;
       result.image = imgLink;
       result.summary = summary;
+      
       db.Article.create(result)
         .then(function(dbArticle) {
           console.log(dbArticle);
