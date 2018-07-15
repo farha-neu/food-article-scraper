@@ -41,7 +41,6 @@ dbConnect.once('open',function(){
 app.get("/scrape", function(req, res) {
   axios.get("https://www.washingtonpost.com/food/").then(function(response) {
     var $ = cheerio.load(response.data);
-    arr =[];
     $(".story-list-story").each(function(i, element) {
       var result = {};
       var newsLink = $(element).find(".story-image").find("a").attr("href");
@@ -55,9 +54,7 @@ app.get("/scrape", function(req, res) {
       result.summary = summary;
       db.Article.create(result)
         .then(function(dbArticle) {
-          arr.push(dbArticle);
-          console.log(Arr);
-          // console.log(dbArticle);
+           console.log(dbArticle);
         })
         .catch(function(err) {
           // If an error occurred, send it to the client
@@ -65,7 +62,7 @@ app.get("/scrape", function(req, res) {
           console.log(err);
         });
     });
-    res.send(arr);
+    res.send("scrape complete");
   });
 });
 
