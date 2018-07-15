@@ -6,14 +6,14 @@ $.getJSON("/articles/false", function(data) {
     var articleDiv = $("<div>").addClass("col-md-12 mb-4 article");
     var row =$("<div>").addClass("row");
 
-    var imageColumn = $("<div>").addClass("col-md-2");
+    var imageColumn = $("<div>").addClass("col-md-2 col-sm-12");
     var img = $("<img class='img-fluid image'>").attr("src",data[i].image);
     var imgLink = $("<a>").addClass("title").attr("href",data[i].link);
     imgLink.attr("target","_blank");
     imgLink.append(img);
     imageColumn.append(imgLink);
 
-    var titleSummaryColumn =  $("<div>").addClass("col-md-8");
+    var titleSummaryColumn =  $("<div>").addClass("col-md-8 col-sm-12 mb-2");
     var newsLink = $("<a>").addClass("title").attr("href",data[i].link).html(data[i].title);
     newsLink.attr("target","_blank");
     var summary = $("<p>").addClass("summary mt-3").html(data[i].summary);
@@ -21,8 +21,8 @@ $.getJSON("/articles/false", function(data) {
     readmore.attr("target","_blank");
     titleSummaryColumn.append(newsLink,summary,readmore);
 
-    var buttonColumn = $("<div>").addClass("col-md-2");
-    var button = $("<button>").addClass('saveBtnbtn btn-success btn-sm saveBtn float-right');
+    var buttonColumn = $("<div>").addClass("col-md-2 col-sm-12 text-center");
+    var button = $("<button>").addClass('saveBtnbtn btn-success btn-sm saveBtn float-md-right');
     button.attr("data-id", data[i]._id);
     button.attr("data-saved",!data[i].isSaved);
     button.append("Save Article");
