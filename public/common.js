@@ -14,6 +14,7 @@ $(document).on("click", ".delete", function() {
       method: "GET",
       url: "/scrape"
     }).then(function(data){
+    console.log(data);
      window.location.href="/";
     });
   })
